@@ -2,7 +2,7 @@ import MeCab
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-tagger = MeCab.Tagger("-Ochasen")
+tagger = MeCab.Tagger("-d /opt/homebrew/lib/mecab/dic/mecab-ipadic-neologd")
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 app.config['JSON_AS_ASCII'] = False
