@@ -12,23 +12,24 @@ app.config['JSON_AS_ASCII'] = False
 def index():
     req = request.json['text']
     print(req)
-    noun = categolizeNoun(req)
-    print(noun)
-    return jsonify({"result": noun})
+    splitType = request.json['splitType']
+    print(splitType)
+    result = categolizeNoun(req, splitType)
+    print(result)
+    return jsonify({"result": result})
 
 # 名詞のみ抽出
-def categolizeNoun (text):
+def categolizeNoun (text, splitType):
   node = tagger.parseToNode(text)
   word_list=[]
   while node:
     word_type = node.feature.split(',')[0]
     #名詞の他にも動詞や形容詞なども追加できる
-    if word_type in ["名詞"]:
+    if word_type in [splitType]:
         word_list.append(node.surface)
     node=node.next
   word_chain=' '.join(word_list)
   print(word_list)
   return word_list
-
 
 app.run(port=8000, debug=True)
