@@ -1,8 +1,10 @@
 import MeCab
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 tagger = MeCab.Tagger("-Ochasen")
 app = Flask(__name__, static_folder='.', static_url_path='')
+CORS(app)
 app.config['JSON_AS_ASCII'] = False
 
 # routing
