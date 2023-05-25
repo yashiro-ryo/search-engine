@@ -1,6 +1,5 @@
 import MeCab
 from flask import Flask, request, jsonify
-import flask
 
 tagger = MeCab.Tagger("-Ochasen")
 app = Flask(__name__, static_folder='.', static_url_path='')
