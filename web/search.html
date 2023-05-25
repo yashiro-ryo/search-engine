@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css" />
+  <title>Mecab</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="mb-3">
+      <label class="form-label">テキストを入力してください</label>
+      <textarea class="form-control" id="query-text" placeholder="例: 今日は天気が良いですね！" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">分け方を選択してください(デフォルトでは名詞)</label>
+      <select id="split-type" class="form-select" aria-label="Default select example">
+        <option value="1">名詞</option>
+        <option value="2">形容詞</option>
+        <option value="3">動詞</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" id="submit-btn" type="submit">送信</button>
+    <p>結果</p>
+    <p id="result-part" />
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // dom取得
+    const query = document.getElementById('query-text')
+    const btn = document.getElementById('submit-btn')
+    const resultPart = document.getElementById('result-part')
+    const splitTypeElm = document.getElementById('split-type')
+    btn.addEventListener('click', () => {
+      if (query.value.length < 1) {
+        return
+      }
+      let splitType = ''
+      switch (splitTypeElm.value) {
+        case '1':
+          splitType = '名詞';
+          break
+        case '2':
+          splitType = '形容詞'
+          break
+        case '3':
+          splitType = '動詞'
+          break
+        default:
+          splitType = ''
+          break;
+      }
+      axios.post('http://127.0.0.1:8000/split', {
+        text: query.value,
+        splitType
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => {
+        const result = res.data.result
+        console.log(result)
+        if (result.length < 1) {
+          resultPart.textContent = '結果はありませんでした。'
+        } else {
+          resultPart.textContent = result
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
